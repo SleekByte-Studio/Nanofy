@@ -21,29 +21,42 @@ enum PaymentModeEnum {
   GPAY
   PHONEPAY
   PAYPAL
-  
+  BANKTRANSFER
 }
 
 model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  name String
+  name  String
   email String @unique
 
+  links             Link[]
+  payouts           Payout[]
+  savedPaymentModes savedPaymentModes[]
+}
 
-  payouts Payout[]
-  links   Link[]
+model savedPaymentModes {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  paymentMode PaymentModeEnum @default(PAYPAL)
+  details     Json
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String? @db.ObjectId
 }
 
 model PaymentMode {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  amount             Float
+  paymentMode        PaymentModeEnum @default(PAYPAL)
+  requestedTimestamp DateTime        @default(now())
+  ApprovalTimestamp  DateTime
 }
 
 model Link {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug      String   @unique
-  createdOn DateTime @default(now())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  createdOn   DateTime @default(now())
+  destination String
 
   User       User?        @relation(fields: [userId], references: [id])
   userId     String       @db.ObjectId
