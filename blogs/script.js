@@ -1,2 +1,0 @@
-
-let timer = 10
