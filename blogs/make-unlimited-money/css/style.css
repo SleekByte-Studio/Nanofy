@@ -13902,3 +13902,26 @@ textarea {
 	background: #fff;
 	color: #214252;
 }
+
+#scroll-info {
+	margin-top: 3rem;
+	visibility: hidden;
+}
+
+#scroll-info p {
+	text-align: center;
+	font-size: 1.5rem;
+	color: black;
+}
+
+#redirect {
+	visibility: hidden;
+	width: 100%;
+	margin: 3rem 0;
+	display: flex;
+	justify-content: center;
+}
+
+#redirect button {
+	margin: auto;
+}
