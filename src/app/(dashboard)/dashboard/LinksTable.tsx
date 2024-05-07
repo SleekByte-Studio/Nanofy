@@ -1,8 +1,21 @@
-import Button from '@/components/Button';
+import { Button } from '@tremor/react';
 import Link from 'next/link';
-import React from 'react';
+import { PropsWithChildren } from 'react';
 
-const LinksTable = () => {
+type LinksTableProps = {
+	links: {
+		id: string;
+		name: string;
+		slug: string;
+		destination: string;
+		impressions: number;
+		revenue: number;
+	}[];
+};
+
+const COLUMNS = ['Name', 'Slug', 'Destination', 'Impressions', 'Revenue'];
+
+const LinksTable = ({ links }: LinksTableProps) => {
 	return (
 		<div className='flex flex-col shadow rounded-lg overflow-x-auto'>
 			<div className=' min-w-full inline-block align-middle'>
@@ -16,52 +29,29 @@ const LinksTable = () => {
 						<table className='min-w-full divide-y divide-violet-200'>
 							<thead className='bg-gray-50'>
 								<tr>
-									<th
-										scope='col'
-										className='px-6 py-3 text-start font-medium text-violet-600 uppercase'
-									>
-										Link
-									</th>
-									<th
-										scope='col'
-										className='px-6 py-3 text-start font-medium text-violet-600 uppercase'
-									>
-										Age
-									</th>
-									<th
-										scope='col'
-										className='px-6 py-3 text-start font-medium text-violet-600 uppercase'
-									>
-										Address
-									</th>
-									<th
-										scope='col'
-										className='px-6 py-3 text-end font-medium text-violet-600 uppercase'
-									>
-										Action
-									</th>
+									{COLUMNS.map((column, index) => (
+										<LinksTableHead key={index}>{column}</LinksTableHead>
+									))}
 								</tr>
 							</thead>
 							<tbody className='divide-y divide-gray-200'>
-								<tr>
-									<td className='px-6 py-4 whitespace-nowrap font-medium text-gray-800'>
-										John Brown
-									</td>
-									<td className='px-6 py-4 whitespace-nowrap text-gray-800'>
-										45
-									</td>
-									<td className='px-6 py-4 whitespace-nowrap text-gray-800'>
-										New York No. 1 Lake Park
-									</td>
-									<td className='px-6 py-4 whitespace-nowrap text-end text-sm font-medium'>
-										<button
-											type='button'
-											className='inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none'
-										>
-											Delete
-										</button>
-									</td>
-								</tr>
+								{links.map((link) => (
+									<tr key={link.id}>
+										<LinksTableRow>{link.name}</LinksTableRow>
+										<LinksTableRow>{link.slug}</LinksTableRow>
+										<LinksTableRow>
+											<a
+												title='Open Link'
+												target='_blank'
+												href={link.destination}
+											>
+												{link.destination}
+											</a>
+										</LinksTableRow>
+										<LinksTableRow>{link.impressions}</LinksTableRow>
+										<LinksTableRow>₹ {link.revenue}</LinksTableRow>
+									</tr>
+								))}
 							</tbody>
 						</table>
 					</div>
@@ -73,6 +63,25 @@ const LinksTable = () => {
 				</div>
 			</div>
 		</div>
+	);
+};
+
+export const LinksTableHead = ({ children }: PropsWithChildren) => {
+	return (
+		<th
+			scope='col'
+			className='px-6 py-3 text-ceter font-semibold text-sm tracking-wider text-violet-600 uppercase'
+		>
+			{children}
+		</th>
+	);
+};
+
+export const LinksTableRow = ({ children }: PropsWithChildren) => {
+	return (
+		<td className='px-6 py-4 font-medium whitespace-nowrap text-center text-gray-800'>
+			{children}
+		</td>
 	);
 };
 

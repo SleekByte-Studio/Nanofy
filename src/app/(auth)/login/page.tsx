@@ -16,6 +16,7 @@ const LoginPage = () => {
 			'email',
 			{},
 			{
+				fullName: '',
 				email: String(formData.get('email')),
 				password: String(formData.get('password'))
 			}

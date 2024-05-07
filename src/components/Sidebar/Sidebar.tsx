@@ -1,9 +1,12 @@
 import Image from 'next/image';
-import SidebarMenus from '@/data/sidebar_menus';
+import { getServerSession } from 'next-auth';
 import { SidebarMenu } from '@/components/Sidebar';
-import Button from '../Button';
+import CreateNewLinkForm from './CreateNewLinkForm';
+import SidebarMenus from '@/constants/sidebar-menus';
+import CreateNewLinkButton from './CreateNewLinkButton';
 
-const Sidebar = () => {
+const Sidebar = async () => {
+	const session = await getServerSession()
 	return (
 		<aside className='h-screen w-[18rem] bg-violet-600 flex flex-col'>
 			{/* Header Section */}
@@ -30,31 +33,26 @@ const Sidebar = () => {
 			</div>
 
 			{/* Create new line button */}
-			<Button className='text-violet-600 flex justify-center gap-3 items-center bg-white mx-3'>
-				Create New Link
-				<Image
-					src={'/dashboard/link.svg'}
-					height={18}
-					width={18}
-					alt='plus'
-				/>
-			</Button>
+			<CreateNewLinkButton>
+				<CreateNewLinkForm />
+			</CreateNewLinkButton>
 
 			{/* Profile Section */}
 
-			<div className='bg-white flex rounded-lg p-3 m-3'>
-				<div>
-					<div className='overflow-hidden rounded-full'>
+			<div className='bg-white flex rounded-lg p-3 m-3 gap-x-3'>
+				<div className='flex items-center'>
+					<div className='overflow-hidden aspect-square h-8 rounded-full'>
 						<Image
-							src={''}
+							src={session?.user?.image || ""}
 							height={32}
 							width={32}
 							alt='Profile Picture'
 						/>
 					</div>
 				</div>
-				<div>
-					<span className='text-sm'>ramakrishnan@gmail.com</span>
+				<div className=''>
+					<span className='block font-semibold'>{session?.user?.name}</span>
+					<span className='block text-sm'>{session?.user?.email}</span>
 				</div>
 			</div>
 		</aside>

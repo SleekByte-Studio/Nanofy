@@ -1,57 +1,47 @@
-'use client';
-
 import Link from 'next/link';
-import Button from '@/components/Button';
-import { PropsWithChildren } from 'react';
-import { ColumnDef, RowModel, Table, useReactTable } from '@tanstack/react-table';
+import { DetailedHTMLProps, PropsWithChildren, TdHTMLAttributes } from 'react';
+import DeleteActionButton from './DeleteActionButton';
+import CopyActionButton from './CopyActionButton';
 
-type LinksTableProps = {};
+type LinksTableProps = {
+	links: {
+		id: string;
+		name: string;
+		slug: string;
+		destination: string;
+		impressions: number;
+	}[];
+};
 
-const COLUMNS: ColumnDef<{}, any>[] = [
-	{ accessorKey: 'Name' },
-	{ accessorKey: 'Slug' },
-	{ accessorKey: 'Status' },
-	{ accessorKey: 'Impressions' },
-	{ accessorKey: 'Revenue' }
-];
+const COLUMNS = ['Name', 'Slug', 'Destination', 'Impressions', 'Action'];
 
-const LinksTable = ({}: LinksTableProps) => {
-	const {} = useReactTable({
-		data: [{}],
-		columns: COLUMNS,
-		getCoreRowModel: function (table: Table<any>): () => RowModel<any> {
-			throw new Error('Function not implemented.');
-		}
-	});
+const LinksTable = ({ links }: LinksTableProps) => {
 	return (
 		<table className='min-w-full divide-y divide-violet-200'>
 			<thead className='bg-gray-50'>
 				<tr>
-					<LinksTableHead>Name</LinksTableHead>
-					<LinksTableHead>Slug</LinksTableHead>
-					<LinksTableHead>Status</LinksTableHead>
-					<LinksTableHead>Impressions</LinksTableHead>
-					<LinksTableHead>Revenue</LinksTableHead>
+					{COLUMNS.map((column, index) => (
+						<LinksTableHead key={index}>{column}</LinksTableHead>
+					))}
 				</tr>
 			</thead>
 			<tbody className='divide-y divide-gray-200'>
-				<tr>
-					<td className='px-6 py-4 whitespace-nowrap font-medium text-gray-800'>
-						John Brown
-					</td>
-					<td className='px-6 py-4 whitespace-nowrap text-gray-800'>45</td>
-					<td className='px-6 py-4 whitespace-nowrap text-gray-800'>
-						New York No. 1 Lake Park
-					</td>
-					<td className='px-6 py-4 whitespace-nowrap text-end text-sm font-medium'>
-						<button
-							type='button'
-							className='inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none'
-						>
-							Delete
-						</button>
-					</td>
-				</tr>
+				{links.map((link) => (
+					<tr key={link.id}>
+						<LinksTableRow>{link.name}</LinksTableRow>
+						<LinksTableRow>{link.slug}</LinksTableRow>
+						<LinksTableRow>
+							<span className='inline-flex gap-x-1'>
+								{link.destination}
+								<CopyActionButton link={link.destination} />
+							</span>
+						</LinksTableRow>
+						<LinksTableRow>{link.impressions}</LinksTableRow>
+						<LinksTableRow>
+							<DeleteActionButton slug={link.slug} />
+						</LinksTableRow>
+					</tr>
+				))}
 			</tbody>
 		</table>
 	);
@@ -61,15 +51,19 @@ export const LinksTableHead = ({ children }: PropsWithChildren) => {
 	return (
 		<th
 			scope='col'
-			className='px-6 py-3 text-start font-semibold text-sm tracking-wider text-violet-600 uppercase'
+			className='px-6 py-3 text-ceter font-semibold text-sm tracking-wider text-violet-600 uppercase'
 		>
 			{children}
 		</th>
 	);
 };
 
-export const LinksTableRow = () => {
-	return;
+export const LinksTableRow = ({ children }: PropsWithChildren) => {
+	return (
+		<td className='px-6 py-4 font-medium whitespace-nowrap text-center text-gray-800'>
+			{children}
+		</td>
+	);
 };
 
 export default LinksTable;

@@ -3,7 +3,7 @@ import Card from './Card';
 
 type StatCardProps = {
 	icon: string;
-	value: string;
+	value: string | number;
 	label: string;
 };
 

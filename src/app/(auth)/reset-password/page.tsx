@@ -3,7 +3,7 @@ import GoogleSignInButton from '@/components/GoogleSignInButton';
 import Input from '@/components/Input';
 import Link from 'next/link';
 
-const ResetPasswordPage = ({ searchParams }: PageProps) => {
+const ResetPasswordPage = ({ searchParams }: any) => {
 	return (
 		<div className='grid gap-y-6 py-6 w-96'>
 			<label className='flex flex-col gap-y-1'>

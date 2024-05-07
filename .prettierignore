@@ -1,0 +1,8 @@
+/node_modules
+/blogs
+/.next
+/prisma
+next-env.d.ts
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
