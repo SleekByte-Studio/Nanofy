@@ -13,7 +13,7 @@ const Header = async () => {
 				<div className='flex select-none items-center'>
 					<div>
 						<Image
-							className='bg-white rounded-xl'
+							className='max-md:bg-white rounded-xl'
 							height={48}
 							width={48}
 							src={'/logo.png'}
@@ -31,7 +31,7 @@ const Header = async () => {
 					<ul className='flex gap-x-6 items-center'>
 						<NavLink href='/'>Home</NavLink>
 						<NavLink href='/faqs'>FAQs</NavLink>
-						<NavLink href='/hiring'>Hiring</NavLink>
+						<NavLink href='/blog'>Blog</NavLink>
 					</ul>
 				</nav>
 

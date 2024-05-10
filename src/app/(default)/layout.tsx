@@ -4,7 +4,7 @@ import Footer from './Footer';
 
 const LandingPageLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<div className='py-20'>
+		<div className='pt-20 max-w-[100vw] overflow-hidden'>
 			<Header />
 			{children}
 			<Footer />
