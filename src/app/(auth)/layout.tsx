@@ -5,7 +5,6 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
 	return (
 		<div className='w-screen min-h-screen bg-violet-100 flex items-center justify-center'>
 			<div className='shadow-lg bg-white rounded-lg p-8 w-max'>
-				
 				<div>
 					<div className='flex select-none items-center gap-x-1'>
 						<Image
