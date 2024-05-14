@@ -13,10 +13,6 @@ export const config: NextAuthOptions = {
 		CredentialsProvider({
 			name: 'Email',
 			credentials: {
-				fullName: {
-					label: 'Full Name',
-					type: 'text'
-				},
 				email: {
 					label: 'Email',
 					type: 'text'
@@ -26,39 +22,28 @@ export const config: NextAuthOptions = {
 					type: 'password'
 				}
 			},
-			async authorize(credentials, req) {
-				const name = credentials?.fullName!;
+			async authorize(credentials) {
 				const email = credentials?.email!;
 				const password = credentials?.password!;
+				console.log(email, password)
 
-				// Checks is the user already present
-				try {
-					const user = await prisma.user.findUnique({
-						where: {
-							email: credentials?.email
-						}
-					});
-					// Return null if user already logged in with Google
-					if (user?.authenticationMode !== 'EMAIL') return null;
-
-					// Returns user if entered password in correct
-					if (await compare(password, user.password!)) {
-						return user;
+				const user = await prisma.user.findUnique({
+					where: {
+						email
 					}
+				});
 
-					return null;
-				} catch {
-					const hashedPassword = await hash(password!, 8);
+				// Return null if user already SignedUp with Google
+				if (user?.authenticationMode !== 'EMAIL') return null;
 
-					return await prisma.user.create({
-						data: {
-							name,
-							email,
-							password: hashedPassword,
-							authenticationMode: 'EMAIL'
-						}
-					});
+				// Returns user if entered password in correct
+				if (await compare(password, user.password!)) {
+					console.log(true)
+					return user;
 				}
+				console.log(false)
+
+				return null;
 			}
 		})
 	],
@@ -75,9 +60,7 @@ export const config: NextAuthOptions = {
 					authenticationMode: 'GOOGLE',
 					name: params.user.name || params.user.email?.split('@')[0]!, // Using the text section before '@' in email
 
-					profile: {
-							
-					}
+					profile: {}
 				},
 				where: {
 					email: params.user.email!
@@ -87,4 +70,3 @@ export const config: NextAuthOptions = {
 		}
 	}
 };
-
