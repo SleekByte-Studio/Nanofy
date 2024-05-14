@@ -1,9 +1,7 @@
-import z from 'zod';
 import redis from '@/services/redis';
 import prisma from '@/services/prisma';
-import { redirect } from 'next/navigation';
 import { createHash, randomInt } from 'crypto';
-import { NextRequest, userAgentFromString } from 'next/server';
+import { NextRequest, NextResponse, userAgentFromString } from 'next/server';
 
 export async function POST(req: NextRequest) {
 	const { slug, country } = await req.json();
@@ -88,4 +86,28 @@ export async function DELETE(req: NextRequest) {
 	});
 
 	return new Response('Success');
+}
+
+type PutBodyType = {
+	id: string;
+	slug: string;
+	name: string;
+	destination: string;
+};
+
+export async function PUT(req: NextRequest) {
+	const { id, name, destination, slug }: PutBodyType = await req.json();
+
+	const link = await prisma.link.update({
+		data: {
+			slug,
+			name,
+			destination
+		},
+		where: {
+			id
+		}
+	});
+
+	return new NextResponse(JSON.stringify(link));
 }

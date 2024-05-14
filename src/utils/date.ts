@@ -1,4 +1,4 @@
-export default function generateDateTextsFromDate(
+export function generateDateTextsFromDate(
 	date: Date,
 	n: number = 30
 ): string[] {
@@ -16,4 +16,13 @@ export default function generateDateTextsFromDate(
 		dateTexts.push(formattedDate);
 	}
 	return dateTexts;
+}
+
+export function formatDate(date: Date) {
+	const formattedDate = Intl.DateTimeFormat('en', {
+		day: '2-digit',
+		month: 'short',
+		year: 'numeric'
+	}).format(date);
+	return formattedDate;
 }

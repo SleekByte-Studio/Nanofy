@@ -13,7 +13,7 @@ type LinksTableProps = {
 	}[];
 };
 
-const COLUMNS = ['Name', 'Slug', 'Destination', 'Impressions', 'Revenue'];
+const COLUMNS = ['Name', 'Slug', 'Destination', 'Impressions', 'Est Revenue'];
 
 const LinksTable = ({ links }: LinksTableProps) => {
 	return (

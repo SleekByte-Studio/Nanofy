@@ -1,11 +1,32 @@
-import EarningsChart from './EarningsChart';
-import PageHeader from '@/components/PageHeader';
-import PageContainer from '@/components/PageContainer';
 import Card from '@/components/Card';
+import EarningsChart from './EarningsChart';
+import WithdrawButton from './WithdrawButton';
+import WithdrawlsTable from './WithdrawlsTable';
+import PageHeader from '@/components/PageHeader';
+import CardHeading from '@/components/CardHeading';
 import WithdrawlProgress from './WithdrawlProgress';
-import { Button } from '@tremor/react';
+import PageContainer from '@/components/PageContainer';
+import { updatePaymentMethod } from '@/actions/withdraw';
+import { Button, Select, TextInput, SelectItem } from '@tremor/react';
+import { getEmail, getUser } from '@/utils/user';
+import prisma from '@/services/prisma';
 
-const EarningsPage = () => {
+async function fetchData() {
+	const user = await getUser();
+	console.log(user);
+	return await Promise.all([
+		// Payment Method Data
+		prisma.paymentMethod.findUnique({
+			where: {
+				userId: user?.id
+			}
+		})
+	]);
+}
+
+const EarningsPage = async () => {
+	const [paymentMethod] = await fetchData();
+	console.log(paymentMethod)
 	return (
 		<PageContainer>
 			<PageHeader
@@ -34,22 +55,47 @@ const EarningsPage = () => {
 							<p className='text-gray-400 text-sm font-medium'>
 								( Threshold Amount for Withdrawl )
 							</p>
-							<Button className='w-full max-w-72'>Withdraw</Button>
+							<WithdrawButton />
 						</div>
 						<WithdrawlProgress />
 					</div>
 				</Card>
-				<Card className='p-8 '>
-					<div className='w-max m-auto'>
+				<Card>
+					<div className='w-max m-auto p-3 space-y-3'>
 						<p className='font-medium flex-1 text-violet-600'>
-							Withdrawl Status
+							Update Payment Method
 						</p>
-						<div>
-							<span className='text-xl'>Amount: ₹ 3023</span>
-						</div>
+						<form
+							className='space-y-3'
+							action={updatePaymentMethod}
+						>
+							<Select
+								name='payment-method'
+								defaultValue={paymentMethod?.method || 'PAYPAL'}
+							>
+								<SelectItem value='PAYPAL'>Paypal</SelectItem>
+								<SelectItem value='GPAY'>Google Pay</SelectItem>
+								<SelectItem value='PHONEPAY'>PhonePay</SelectItem>
+							</Select>
+							<TextInput
+								name='id'
+								placeholder='Email / UPI ID :'
+								defaultValue={paymentMethod?.details?.id!}
+							/>
+							<Button
+								type='submit'
+								className='min-w-72'
+							>
+								Update
+							</Button>
+						</form>
 					</div>
 				</Card>
 			</div>
+			<Card>
+				<CardHeading>Payouts History</CardHeading>
+				<WithdrawlsTable payouts={[]} />
+			</Card>
 		</PageContainer>
 	);
 };

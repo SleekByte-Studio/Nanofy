@@ -4,8 +4,12 @@ import PageHeader from '@/components/PageHeader';
 import PageContainer from '@/components/PageContainer';
 import { Button, Divider, TextInput } from '@tremor/react';
 import { updateProfileAction } from '@/actions/profile';
+import { getUser } from '@/utils/user';
+import Link from 'next/link';
+import LogoutActionButton from './LogoutActionButton';
 
-const ProfilePage = () => {
+const ProfilePage = async () => {
+	const user = await getUser();
 	return (
 		<PageContainer>
 			<PageHeader
@@ -18,12 +22,25 @@ const ProfilePage = () => {
 					<h2 className='text-2xl text-violet-950 font-semibold'>
 						User Profile
 					</h2>
-					<Image
-						src={''}
-						height={32}
-						width={32}
-						alt='Profile Picture'
-					/>
+					<div className='flex gap-x-6 items-center'>
+						<Image
+							className='rounded-full'
+							src={user?.image || '/images/default-avatar.jpg'}
+							height={80}
+							width={80}
+							alt='Profile Picture'
+						/>
+						<div className='flex-1'>
+							<span className='block text-xl font-medium'>{user?.name}</span>
+							<span className='block text-violet-600'>{user?.email}</span>
+						</div>
+						<div className='flex flex-col gap-y-3'>
+							<LogoutActionButton />
+							<Link href={'/reset-password'}>
+								<Button className='font-semibold'>Reset Password</Button>
+							</Link>
+						</div>
+					</div>
 				</div>
 			</Card>
 

@@ -2,13 +2,13 @@
 
 import { z } from 'zod';
 import prisma from '@/services/prisma';
-import { getServerSession } from 'next-auth';
+import { getEmail } from '@/utils/user';
 import { revalidatePath } from 'next/cache';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 const linkSchema = z.object({
 	name: z.string().max(20, "Name can't have more than 20 characters"),
-	slug: z.string().max(10, "Slug can't have more than 10 characters"),
+	slug: z.string().max(12, "Slug can't have more than 10 characters"),
 	destination: z.string().url('Enter a valid URL')
 });
 
@@ -28,7 +28,7 @@ export async function createNewLinkAction(
 			destination: formData.get('destination')
 		});
 
-		const user = await getServerSession();
+		const email = await getEmail()
 
 		const link = await prisma.link.create({
 			data: {
@@ -37,7 +37,7 @@ export async function createNewLinkAction(
 				slug,
 				User: {
 					connect: {
-						email: user?.user?.email!
+						email
 					}
 				}
 			}
@@ -47,7 +47,7 @@ export async function createNewLinkAction(
 
 		return {
 			status: 'success',
-			payload: `${process.env.NEXT_PUBLIC_APP_URL}/${link.slug}`
+			payload: `${process.env.NEXT_PUBLIC_URL_PREFIX}/${link.slug}`
 		};
 	} catch (err: any) {
 		if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {

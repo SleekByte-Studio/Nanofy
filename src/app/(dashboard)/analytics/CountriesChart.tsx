@@ -1,47 +1,10 @@
 import { cn } from '@/utils/cn';
-import CardHeading from '@/components/CardHeading';
-
-import {
-	DonutChart,
-	Color,
-	BarChart,
-	ListItem,
-	List,
-	Card
-} from '@tremor/react';
+import Card from '@/components/Card';
 import { Prisma } from '@prisma/client';
-const data = [
-	{
-		country: 'Travel',
-		impressions: 6730,
-		share: '32.1%',
-		color: 'bg-cyan-500'
-	},
-	{
-		country: 'IT & equipment',
-		impressions: 4120,
-		share: '19.6%',
-		color: 'bg-blue-500'
-	},
-	{
-		country: 'Training & development',
-		impressions: 3920,
-		share: '18.6%',
-		color: 'bg-indigo-500'
-	},
-	{
-		country: 'Office supplies',
-		impressions: 3210,
-		share: '15.3%',
-		color: 'bg-violet-500'
-	},
-	{
-		country: 'Communication',
-		impressions: 3010,
-		share: '14.3%',
-		color: 'bg-fuchsia-500'
-	}
-];
+import colors from '@/constants/colors';
+import CardHeading from '@/components/CardHeading';
+import countryCodes from '@/constants/country-codes';
+import { DonutChart, ListItem, List } from '@tremor/react';
 
 type CountriesChartProps = {
 	countryData: (Prisma.PickEnumerable<
@@ -50,9 +13,16 @@ type CountriesChartProps = {
 	> & {
 		_count: number;
 	})[];
+	totalCount: number;
 };
 
-const CountriesChart = ({ countryData }: CountriesChartProps) => {
+const CountriesChart = ({ countryData, totalCount }: CountriesChartProps) => {
+	const data = countryData.map(({ _count, country }, index) => ({
+		country: countryCodes[country!],
+		impressions: _count,
+		color: colors[index],
+		share: `${Math.round((_count / totalCount) * 100)} %`
+	}));
 	return (
 		<Card className='col-span-2'>
 			<CardHeading>Countries</CardHeading>
@@ -62,22 +32,23 @@ const CountriesChart = ({ countryData }: CountriesChartProps) => {
 				index='country'
 				data={countryData}
 				category='_count'
-				colors={['purple-700', 'purple-500', 'purple-300', 'purple-100']}
+				colors={colors}
 			/>
-			<List className='mt-2'>
+			<List className='w-full p-3 row-span-2 pan overflow-y-scroll'>
 				{data.map((item) => (
 					<ListItem
 						key={item.country}
-						className='space-x-6'
+						className=''
 					>
 						<div className='flex items-center space-x-2.5 truncate'>
 							<span
-								className={cn(item.color, 'h-2.5 w-2.5 shrink-0 rounded-sm')}
+								className={cn(
+									`bg-${item.color}`,
+									'h-2.5 w-2.5 shrink-0 rounded-sm'
+								)}
 								aria-hidden={true}
 							/>
-							<span className='truncate dark:text-dark-tremor-content-emphasis'>
-								{item.country}
-							</span>
+							<span className='truncate'>{item.country}</span>
 						</div>
 						<div className='flex items-center space-x-2'>
 							<span className='font-medium tabular-nums text-tremor-content-strong dark:text-dark-tremor-content-strong'>

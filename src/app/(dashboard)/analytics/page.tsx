@@ -90,16 +90,29 @@ async function fetchData() {
 					$sort: { _id: 1 }
 				}
 			]
+		}),
+
+		prisma.impression.count({
+			where: {
+				link: {
+					User: {
+						email
+					}
+				}
+			}
 		})
 	]);
 }
 
-
-
 const AnalyticsPage = async () => {
-	const [browserData, deviceData, OsData, countryData, impressionData] =
-		await fetchData();
-	console.log(impressionData);
+	const [
+		browserData,
+		deviceData,
+		OsData,
+		countryData,
+		impressionData,
+		totalImpressions
+	] = await fetchData();
 	return (
 		<PageContainer>
 			<PageHeader
@@ -110,17 +123,20 @@ const AnalyticsPage = async () => {
 			<div className='flex flex-col gap-6'>
 				<div className='grid grid-cols-5 gap-6'>
 					{/* Country */}
-					<CountriesChart countryData={countryData} />
+					<CountriesChart
+						countryData={countryData}
+						totalCount={totalImpressions}
+					/>
 
 					<div className='flex col-span-3 flex-col gap-6'>
 						{/* Operating System */}
-						<Card>
+						<Card className='p-3'>
 							<CardHeading>Operating Systems</CardHeading>
 							<DonutChart
-								className='h-64'
-								variant='pie'
 								index='os'
+								variant='pie'
 								data={OsData}
+								className='h-64'
 								category='_count'
 								colors={[
 									'purple-700',
@@ -132,14 +148,14 @@ const AnalyticsPage = async () => {
 						</Card>
 
 						{/* Browser */}
-						<Card>
+						<Card className='p-3'>
 							<CardHeading>Browsers</CardHeading>
 							<DonutChart
-								className='h-64'
 								variant='pie'
 								index='browser'
-								data={browserData}
+								className='h-64'
 								category='_count'
+								data={browserData}
 								colors={[
 									'purple-700',
 									'purple-500',
@@ -156,9 +172,11 @@ const AnalyticsPage = async () => {
 						<CardHeading>Impressions</CardHeading>
 
 						<BarChart
-							data={Array(impressionData)}
-							categories={['count']}
 							index='_id'
+							showLegend={false}
+							categories={['count']}
+							colors={['purple-600']}
+							data={Array(...Object(impressionData))}
 						/>
 					</Card>
 
@@ -168,12 +186,12 @@ const AnalyticsPage = async () => {
 
 						<DonutChart
 							showLabel
-							index='browser'
+							index='device'
+							label='Device'
 							variant='donut'
 							className='h-64'
 							data={deviceData}
 							category='_count'
-							label='Device'
 							colors={['purple-700', 'purple-500', 'purple-300', 'purple-100']}
 						/>
 					</Card>

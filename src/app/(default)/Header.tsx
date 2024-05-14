@@ -30,6 +30,7 @@ const Header = async () => {
 				<nav className='flex-1 font-medium flex justify-center'>
 					<ul className='flex gap-x-6 items-center'>
 						<NavLink href='/'>Home</NavLink>
+						<NavLink href='/payout-rates'>Payout Rates</NavLink>
 						<NavLink href='/faqs'>FAQs</NavLink>
 						<NavLink href='/blog'>Blog</NavLink>
 					</ul>

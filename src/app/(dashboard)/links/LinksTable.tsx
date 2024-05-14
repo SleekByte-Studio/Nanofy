@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { DetailedHTMLProps, PropsWithChildren, TdHTMLAttributes } from 'react';
-import DeleteActionButton from './DeleteActionButton';
+import { PropsWithChildren } from 'react';
 import CopyActionButton from './CopyActionButton';
+import DeleteActionButton from './DeleteActionButton';
+import EditActionButton from './EditActionButton';
 
 type LinksTableProps = {
 	links: {
@@ -30,15 +30,19 @@ const LinksTable = ({ links }: LinksTableProps) => {
 					<tr key={link.id}>
 						<LinksTableRow>{link.name}</LinksTableRow>
 						<LinksTableRow>{link.slug}</LinksTableRow>
-						<LinksTableRow>
-							<span className='inline-flex gap-x-1'>
-								{link.destination}
-								<CopyActionButton link={link.destination} />
-							</span>
-						</LinksTableRow>
+						<LinksTableRow>{link.destination}</LinksTableRow>
 						<LinksTableRow>{link.impressions}</LinksTableRow>
 						<LinksTableRow>
-							<DeleteActionButton slug={link.slug} />
+							<div className='flex justify-center space-x-2'>
+								<CopyActionButton slug={link.slug} />
+								<EditActionButton
+									id={link.id}
+									slug={link.slug}
+									name={link.name}
+									destination={link.destination}
+								/>
+								<DeleteActionButton slug={link.slug} />
+							</div>
 						</LinksTableRow>
 					</tr>
 				))}

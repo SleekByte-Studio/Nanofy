@@ -1,6 +1,6 @@
 'use client';
 import { AreaChart } from '@tremor/react';
-import generateDateTextsFromDate from '@/utils/date';
+import { generateDateTextsFromDate } from '@/utils/date';
 
 type EarningsChartProps = {};
 

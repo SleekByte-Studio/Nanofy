@@ -2,6 +2,7 @@ import Image from 'next/image';
 import FeedbackCard from './FeedbackCard';
 import FeatureCard from './FeatureCard';
 import { Button } from '@tremor/react';
+import features from '@/constants/features';
 
 const HomePage = () => {
 	return (
@@ -27,9 +28,9 @@ const HomePage = () => {
 				<figure className='relative max-w-full z-0 w-[50rem] h-auto bg-gray-200 overflow-hidden rounded-lg shadow-[0_2.75rem_3.5rem_-2rem_rgb(221_214_254),_0_0_5rem_-2rem_rgb(124_58_237)]'>
 					<div className='relative flex items-center max-w-[50rem] bg-gray-200  py-2 px-24'>
 						<div className='flex space-x-1 absolute top-2/4 start-4 -translate-y-1'>
-							<span className='size-2 bg-gray-400 rounded-full'></span>
-							<span className='size-2 bg-gray-400 rounded-full'></span>
-							<span className='size-2 bg-gray-400 rounded-full'></span>
+							<span className='size-2 bg-gray-400 rounded-full' />
+							<span className='size-2 bg-gray-400 rounded-full' />
+							<span className='size-2 bg-gray-400 rounded-full' />
 						</div>
 						<div className='flex justify-center items-center size-full bg-gray-300 text-[.25rem] text-gray-400 rounded-sm sm:text-[.5rem]'>
 							www.nanofy.in
@@ -54,51 +55,18 @@ const HomePage = () => {
 				</h2>
 				<div className='w-full p-20'>
 					<div className='container mx-auto grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6'>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
-						<FeatureCard
-							heading='Highest CPM in the Market'
-							iconUrl='/landing-page/rupee-icon.svg'
-							body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-									mollitia dolorem repudiandae ratione nesciunt consectetur. Nesciunt
-									nam amet odit nostrum?'
-						/>
+						{features.map((feature, index) => (
+							<FeatureCard
+								key={index}
+								{...feature}
+							/>
+						))}
 					</div>
 				</div>
 			</div>
+
+			{/* How it works Section */}
+			<div className='flex relative gap-y-6 flex-col items-center py-20'></div>
 
 			{/* Feedbacks Section */}
 			<div className='flex relative gap-y-6 flex-col bg-violet-50 items-center py-20'>
@@ -109,53 +77,53 @@ const HomePage = () => {
 				<div className=' container mx-auto grid grid-cols-3 gap-6'>
 					<div className='flex flex-col gap-6'>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='Emily Johnson'
+							designation='Marketing Manager'
+							feedback="The high CPM rates have significantly boosted our revenue streams. It's been a game-changer for our marketing efforts."
 						/>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='David Lee'
+							designation='Customer Support Specialist'
+							feedback='Instant customer support has allowed us to address user inquiries promptly, enhancing overall user satisfaction.'
 						/>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
-						/>
-					</div>
-					<div className='flex flex-col gap-6'>
-						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.dasdwas dwashda daw hawudawd'
-						/>
-						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
-						/>
-						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='Sarah Thompson'
+							designation='Finance Coordinator'
+							feedback='The flexibility in payout methods has simplified our financial operations, catering to diverse preferences seamlessly.'
 						/>
 					</div>
 					<div className='flex flex-col gap-6'>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='Michael Patel'
+							designation='Data Analyst'
+							feedback='Comprehensive analytics tools have provided invaluable insights, enabling data-driven decision-making and strategy refinement.'
 						/>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='Jessica Nguyen'
+							designation='Accounts Manager'
+							feedback='Instant payment processing has streamlined our payment cycles, ensuring timely disbursement of earnings to our clients.'
 						/>
 						<FeedbackCard
-							name='Carryminati'
-							designation='Youtuber'
-							feedback='I made around 5k last month using nanofy as a side hustle.'
+							name='Alex Carter'
+							designation='UI/UX Designer'
+							feedback='The user-friendly interface has received overwhelmingly positive feedback, enhancing user engagement and retention.'
+						/>
+					</div>
+					<div className='flex flex-col gap-6'>
+						<FeedbackCard
+							name='Ryan Smith'
+							designation='Content Creator'
+							feedback='The detailed analytics have revolutionized our content strategy, allowing us to tailor our campaigns for maximum impact.'
+						/>
+						<FeedbackCard
+							name='Lisa Evans'
+							designation='Operations Manager'
+							feedback='The flexibility in payout methods has made managing earnings across different platforms a breeze, saving us time and effort.'
+						/>
+						<FeedbackCard
+							name='Daniel Williams'
+							designation='Founder'
+							feedback='The combination of these features has solidified our position as a leading URL shortening SaaS, delivering value and innovation to our users.'
 						/>
 					</div>
 				</div>

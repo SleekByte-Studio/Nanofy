@@ -23,8 +23,8 @@ const Footer = () => {
 				<div className='flex-1 flex justify-end'>
 					<nav>
 						<ul className='flex gap-x-6 font-medium items-center'>
-							<Link href='/referral'>
-								<li>Referral</li>
+							<Link href='/payout-rates'>
+								<li>Payout Rates</li>
 							</Link>
 							<Link href='/terms-of-use'>
 								<li>Terms of Use</li>

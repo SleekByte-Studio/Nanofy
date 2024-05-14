@@ -1,7 +1,13 @@
+import { cookies } from 'next/headers';
 import { PropsWithChildren } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import { redirect } from 'next/navigation';
+import { Sidebar } from '@/components/Sidebar';
 
 const DashboardLayout = ({ children }: PropsWithChildren) => {
+	const sessionToken = cookies().get("next-auth.session-token")
+	if (!sessionToken) {
+		redirect('/login')
+	} 
 	return (
 		<div className='flex h-screen'>
 			<Sidebar />

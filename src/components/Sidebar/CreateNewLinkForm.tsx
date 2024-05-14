@@ -1,8 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { TextInput } from '@tremor/react';
-import { Button, Callout } from '@tremor/react';
 import { useFormState, useFormStatus } from 'react-dom';
+import { Button, Callout, TextInput } from '@tremor/react';
 import { createNewLinkAction, CreateNewLinkPayloadType } from '@/actions/link';
 
 const CreateNewLinkForm = () => {

@@ -5,11 +5,12 @@ import { getEmail } from '@/utils/user';
 import StatCard from '@/components/StatCard';
 import PageHeader from '@/components/PageHeader';
 import PageContainer from '@/components/PageContainer';
+import { formatNumber } from '@/utils/number';
 
 async function fetchData() {
 	const email = await getEmail();
 
-	const [linksData, activeLinks, impressions, impressionsByCountry] =
+	const [linksData, activeLinks, impressions, impressionsByCountry, balance] =
 		await Promise.all([
 			prisma.link.findMany({
 				where: {
@@ -48,19 +49,33 @@ async function fetchData() {
 				}
 			}),
 
-			// Average CPM
+			// Impressions by Country
 			prisma.impression.groupBy({
 				by: 'country',
 				orderBy: {}
+			}),
+
+			prisma.user.findUnique({
+				where: {
+					email
+				},
+				select: {
+					balance: true
+				}
 			})
 		]);
 
-	let averageCPM = 0;
+	let totalCPM = 0;
 	impressionsByCountry.forEach((impression) => {
-		averageCPM += CPM[impression.country!];
+		totalCPM += CPM[impression.country!];
 	});
 
 	return {
+		balance: balance?.balance,
+		activeLinks,
+		impressions,
+		averageCPM: totalCPM / impressionsByCountry.length,
+
 		// Formatting Links
 		links: linksData.map(({ id, _count, destination, name, slug }) => ({
 			id,
@@ -69,31 +84,29 @@ async function fetchData() {
 			destination,
 			impressions: _count.Impression,
 			revenue: (_count.Impression * (40 * 82)) / 1000
-		})),
-		activeLinks,
-		impressions,
-		revenue: averageCPM * impressions
+		}))
 	};
 }
 
 const DashboardPage = async () => {
-	const { links, activeLinks } = await fetchData();
+	const { links, activeLinks, averageCPM, impressions, balance } =
+		await fetchData();
 	return (
 		<PageContainer>
 			<PageHeader
 				heading='Dashboard'
-				subheading='Shorten your urls to earn upto 20$'
+				subheading='Get an minimal overview of this month'
 			/>
 			<div className='grid grid-cols-4 gap-x-8'>
 				<StatCard
 					icon='/dashboard/dollar.svg'
-					label='Revenue'
-					value='₹ 432'
+					label='Balance'
+					value={`₹ ${balance || 0}`}
 				/>
 				<StatCard
 					icon='/dashboard/eye.svg'
 					label='Impressions'
-					value='3233'
+					value={formatNumber(impressions)}
 				/>
 				<StatCard
 					icon='/dashboard/link.svg'
@@ -103,7 +116,7 @@ const DashboardPage = async () => {
 				<StatCard
 					icon='/dashboard/cursor.svg'
 					label='Average CPM'
-					value='₹ 0.40'
+					value={`₹ ${averageCPM}`}
 				/>
 			</div>
 

@@ -3,17 +3,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 type CopyActionButtonProps = {
-	link: string;
+	slug: string;
 };
 
-const CopyActionButton = ({ link }: CopyActionButtonProps) => {
+const CopyActionButton = ({ slug }: CopyActionButtonProps) => {
 	function copyToClipboard() {
-		navigator.clipboard.writeText(link);
+		navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_URL_PREFIX}/${slug}`);
 	}
 	return (
 		<Image
 			onClick={copyToClipboard}
-			className='cursor-pointer'
+			className='cursor-pointer hover:opacity-60'
 			src={'/icons/copy-2.svg'}
 			alt='copy icon'
 			height={18}

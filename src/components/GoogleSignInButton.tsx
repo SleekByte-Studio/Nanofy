@@ -9,6 +9,7 @@ const GoogleSignInButton = () => {
 	};
 	return (
 		<button
+			type='button'
 			onClick={clickHandler}
 			className='flex outline-1 hover:bg-purple-50 transition-colors gap-x-3 justify-center  outline outline-gray-400 rounded-lg px-6 py-3'
 		>

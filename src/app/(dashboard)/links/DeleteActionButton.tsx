@@ -29,14 +29,15 @@ const DeleteActionButton = ({ slug }: DeleteActionButtonProps) => {
 	}
 	return (
 		<>
-			<Button onClick={() => setIsOpen(true)}>
+			<button onClick={() => setIsOpen(true)}>
 				<Image
+					className='hover:opacity-60'
 					src={'/icons/delete.svg'}
 					height={20}
 					width={20}
 					alt='delete'
 				/>
-			</Button>
+			</button>
 			<Dialog
 				open={isOpen}
 				onClose={(val) => setIsOpen(val)}

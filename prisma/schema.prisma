@@ -19,11 +19,10 @@ enum PayoutStatus {
   APPROVED
 }
 
-enum PaymentModeEnum {
+enum PaymentMethodEnum {
   GPAY
   PHONEPAY
   PAYPAL
-  BANKTRANSFER
 }
 
 model User {
@@ -36,10 +35,13 @@ model User {
 
   authenticationMode AuthenticationMode @default(GOOGLE)
 
-  profile           Profile?
-  links             Link[]
-  payouts           Payout[]
-  savedPaymentModes savedPaymentModes[]
+  balance    Int   @default(0)
+  averageCPM Float @default(0)
+
+  links         Link[]
+  payouts       Payout[]
+  profile       Profile?
+  paymentMethod PaymentMethod?
 }
 
 model Profile {
@@ -56,21 +58,14 @@ model Profile {
   userId String @unique @db.ObjectId
 }
 
-model savedPaymentModes {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
-  paymentMode PaymentModeEnum @default(PAYPAL)
-  details     Json
+model PaymentMethod {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String? @db.ObjectId
-}
+  details Json
+  method  PaymentMethodEnum @default(PAYPAL)
 
-model PaymentMode {
-  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
-  amount             Float
-  paymentMode        PaymentModeEnum @default(PAYPAL)
-  requestedTimestamp DateTime        @default(now())
-  ApprovalTimestamp  DateTime
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
 }
 
 model Link {
@@ -88,10 +83,12 @@ model Link {
 }
 
 model Payout {
-  id     String          @id @default(auto()) @map("_id") @db.ObjectId
-  status PayoutStatus    @default(PENDING)
-  amount Int             @default(1000)
-  mode   PaymentModeEnum @default(PAYPAL)
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  amount    Int               @default(1000)
+  status    PayoutStatus      @default(PENDING)
+  timestamp DateTime          @default(now())
+  method    PaymentMethodEnum @default(PAYPAL)
 
   User   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
@@ -115,8 +112,4 @@ model Impression {
 
   link   Link   @relation(fields: [linkId], references: [id])
   linkId String @db.ObjectId
-}
-
-model CPM {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
 }

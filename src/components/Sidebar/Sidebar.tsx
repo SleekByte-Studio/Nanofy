@@ -4,9 +4,10 @@ import { SidebarMenu } from '@/components/Sidebar';
 import CreateNewLinkForm from './CreateNewLinkForm';
 import SidebarMenus from '@/constants/sidebar-menus';
 import CreateNewLinkButton from './CreateNewLinkButton';
+import { getUser } from '@/utils/user';
 
 const Sidebar = async () => {
-	const session = await getServerSession()
+	const user = await getUser()
 	return (
 		<aside className='h-screen w-[18rem] bg-violet-600 flex flex-col'>
 			{/* Header Section */}
@@ -43,7 +44,7 @@ const Sidebar = async () => {
 				<div className='flex items-center'>
 					<div className='overflow-hidden aspect-square h-8 rounded-full'>
 						<Image
-							src={session?.user?.image || ""}
+							src={user?.image || '/images/default-avatar.jpg'}
 							height={32}
 							width={32}
 							alt='Profile Picture'
@@ -51,8 +52,8 @@ const Sidebar = async () => {
 					</div>
 				</div>
 				<div className=''>
-					<span className='block font-semibold'>{session?.user?.name}</span>
-					<span className='block text-sm'>{session?.user?.email}</span>
+					<span className='block font-semibold'>{user?.name}</span>
+					<span className='block text-sm'>{user?.email}</span>
 				</div>
 			</div>
 		</aside>

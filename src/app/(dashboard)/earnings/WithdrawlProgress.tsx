@@ -1,5 +1,8 @@
 'use client';
+
 import { ProgressCircle } from '@tremor/react';
+
+// Extracted into component as Context API is used
 
 const WithdrawlProgress = () => {
 	return (

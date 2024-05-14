@@ -5,6 +5,7 @@ import { Link } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import PageHeader from '@/components/PageHeader';
 import PageContainer from '@/components/PageContainer';
+import CardHeading from '@/components/CardHeading';
 
 async function fetchLinks() {
 	const session = await getServerSession();
@@ -38,11 +39,7 @@ const LinksPage = async () => {
 				subheading='Shorten your urls to earn upto 20$'
 			/>
 			<Card>
-				<div className='py-3 px-4'>
-					<div className='relative max-w-xs'>
-						<h3 className='text-xl font-semibold'>Your Links</h3>
-					</div>
-				</div>
+				<CardHeading>Your Links</CardHeading>
 				<LinksTable links={links} />
 			</Card>
 		</PageContainer>

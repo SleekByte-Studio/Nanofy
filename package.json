@@ -13,6 +13,8 @@
 		"format": "prettier --write *.{js,json,ts,tsx,yaml}"
 	},
 	"dependencies": {
+		"@aws-sdk/client-ses": "^3.574.0",
+		"@aws-sdk/credential-provider-node": "^3.572.0",
 		"@headlessui/react": "^1.7.18",
 		"@headlessui/tailwindcss": "^0.2.0",
 		"@prisma/client": "^5.9.1",
