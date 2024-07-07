@@ -18,11 +18,15 @@ export function generateDateTextsFromDate(
 	return dateTexts;
 }
 
-export function formatDate(date: Date) {
+export function formatDate(date: Date, compact = false) {
 	const formattedDate = Intl.DateTimeFormat('en', {
 		day: '2-digit',
 		month: 'short',
-		year: 'numeric'
+		...(compact
+			? {
+					year: 'numeric'
+			  }
+			: {})
 	}).format(date);
 	return formattedDate;
 }

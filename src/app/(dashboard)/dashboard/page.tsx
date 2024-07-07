@@ -1,21 +1,21 @@
 import CPM from '@/constants/cpm';
 import LinksTable from './LinksTable';
 import prisma from '@/services/prisma';
-import { getEmail } from '@/utils/user';
+import { getEmail, getUser } from '@/utils/user';
 import StatCard from '@/components/StatCard';
 import PageHeader from '@/components/PageHeader';
 import PageContainer from '@/components/PageContainer';
 import { formatNumber } from '@/utils/number';
 
 async function fetchData() {
-	const email = await getEmail();
+	const user = await getUser();
 
 	const [linksData, activeLinks, impressions, impressionsByCountry, balance] =
 		await Promise.all([
 			prisma.link.findMany({
 				where: {
 					User: {
-						email
+						email: user?.email
 					}
 				},
 				include: {
@@ -33,7 +33,7 @@ async function fetchData() {
 			prisma.link.count({
 				where: {
 					User: {
-						email
+						email: user?.email
 					}
 				}
 			}),
@@ -43,7 +43,7 @@ async function fetchData() {
 				where: {
 					link: {
 						User: {
-							email
+							email: user?.email
 						}
 					}
 				}
@@ -52,12 +52,20 @@ async function fetchData() {
 			// Impressions by Country
 			prisma.impression.groupBy({
 				by: 'country',
-				orderBy: {}
+				orderBy: {},
+				where: {
+					link: {
+						User: {
+							email: user?.email
+						}
+					}
+				}
 			}),
 
+			// Balance
 			prisma.user.findUnique({
 				where: {
-					email
+					email: user?.email
 				},
 				select: {
 					balance: true
@@ -65,16 +73,11 @@ async function fetchData() {
 			})
 		]);
 
-	let totalCPM = 0;
-	impressionsByCountry.forEach((impression) => {
-		totalCPM += CPM[impression.country!];
-	});
-
 	return {
 		balance: balance?.balance,
 		activeLinks,
 		impressions,
-		averageCPM: totalCPM / impressionsByCountry.length,
+		averageCPM: user?.averageCPM,
 
 		// Formatting Links
 		links: linksData.map(({ id, _count, destination, name, slug }) => ({
@@ -83,7 +86,9 @@ async function fetchData() {
 			slug,
 			destination,
 			impressions: _count.Impression,
-			revenue: (_count.Impression * (40 * 82)) / 1000
+			revenue: user?.averageCPM
+				? _count.Impression * (user?.averageCPM / 1000)
+				: 0
 		}))
 	};
 }
@@ -116,7 +121,7 @@ const DashboardPage = async () => {
 				<StatCard
 					icon='/dashboard/cursor.svg'
 					label='Average CPM'
-					value={`₹ ${averageCPM}`}
+					value={`₹ ${averageCPM || 0}`}
 				/>
 			</div>
 

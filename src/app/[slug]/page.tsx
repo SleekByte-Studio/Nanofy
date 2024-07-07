@@ -14,10 +14,12 @@ const RedirectionPage = () => {
 				country,
 				...params
 			});
-			location.href = data;
+			// location.href = data;
 		})();
 	}, [params]);
-	return <div></div>;
+	return <div>
+
+	</div>
 };
 
 export default RedirectionPage;
